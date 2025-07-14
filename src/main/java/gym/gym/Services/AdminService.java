@@ -1,0 +1,55 @@
+package gym.gym.Services;
+
+
+import gym.gym.Models.Admin;
+import gym.gym.Models.Gym;
+import gym.gym.Repositories.AdminRepo;
+import gym.gym.Repositories.GymRepo;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class AdminService {
+    @Autowired
+    private AdminRepo adminRepo;
+@Autowired
+private GymRepo gymRepo;
+
+
+    public Admin saveAdmin(Admin admindto) {
+        Gym gym = gymRepo.findById(admindto.getGym().getId()).orElse(null);
+        Admin admin = new Admin();
+        admin.setUsername(admindto.getUsername());
+        admin.setPassword(admindto.getPassword());
+        admin.setGym(gym);
+        return adminRepo.save(admin);
+    }
+
+    public void deleteAdmin (Long id) {
+
+        adminRepo.deleteById(id);
+    }
+
+    public boolean updateAdminById(Long id, Admin adminData) {
+        Optional<Admin> optionalAdmin = adminRepo.findById(id);
+
+        if (optionalAdmin.isPresent()) {
+            Admin existingAdmin = optionalAdmin.get();
+            existingAdmin.setUsername(adminData.getUsername());
+            existingAdmin.setPassword(adminData.getPassword()); // hash si nécessaire
+            adminRepo.save(existingAdmin);
+            return true;
+        }
+        return false;
+    }
+
+public List<Admin> getAllAdmins() {
+        return adminRepo.findAll();
+}
+
+
+}
