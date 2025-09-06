@@ -17,8 +17,8 @@ public class SubscriptionController {
     private SubscriptionService subscriptionService;
 
     @GetMapping
-    public List<Subscription> getAllSubscriptions() {
-        return subscriptionService.getAllSubscriptions();
+    public List<Subscription> getAllSubscriptions(@RequestParam Long gymId) {
+        return subscriptionService.getAllSubscriptionsByGymId(gymId);
     }
 
     @PostMapping
@@ -27,15 +27,15 @@ public class SubscriptionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Subscription> getSubscriptionById(@PathVariable Long id) {
-        Optional<Subscription> subscription = subscriptionService.getSubscriptionById(id);
+    public ResponseEntity<Subscription> getSubscriptionById(@PathVariable Long id, @RequestParam Long gymId) {
+        Optional<Subscription> subscription = subscriptionService.getSubscriptionByIdAndGymId(id, gymId);
         return subscription.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSubscription(@PathVariable Long id) {
-        if (subscriptionService.getSubscriptionById(id).isPresent()) {
+    public ResponseEntity<Void> deleteSubscription(@PathVariable Long id, @RequestParam Long gymId) {
+        if (subscriptionService.getSubscriptionByIdAndGymId(id, gymId).isPresent()) {
             subscriptionService.deleteSubscription(id);
             return ResponseEntity.noContent().build();
         }

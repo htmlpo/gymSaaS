@@ -29,14 +29,18 @@ private GymRepo gymRepo;
         return adminRepo.save(admin);
     }
 
+    public List<Admin> getAllAdminsByGymId(Long gymId) {
+        return adminRepo.findByGym_Id(gymId);
+    }
+
     public void deleteAdmin (Long id) {
 
         adminRepo.deleteById(id);
     }
 
-    public boolean updateAdminById(Long id, Admin adminData) {
-        Optional<Admin> optionalAdmin = adminRepo.findById(id);
-
+    public boolean updateAdminById(Long id, Long gymId, Admin adminData) {
+        Optional<Admin> optionalAdmin = adminRepo.findById(id)
+            .filter(admin -> admin.getGym() != null && admin.getGym().getId().equals(gymId));
         if (optionalAdmin.isPresent()) {
             Admin existingAdmin = optionalAdmin.get();
             existingAdmin.setUsername(adminData.getUsername());
@@ -47,9 +51,10 @@ private GymRepo gymRepo;
         return false;
     }
 
-public List<Admin> getAllAdmins() {
-        return adminRepo.findAll();
-}
+    public Optional<Admin> getAdminByIdAndGymId(Long id, Long gymId) {
+        return adminRepo.findById(id)
+            .filter(admin -> admin.getGym() != null && admin.getGym().getId().equals(gymId));
+    }
 
 
 }

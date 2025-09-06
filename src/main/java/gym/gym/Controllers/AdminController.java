@@ -18,8 +18,8 @@ public class AdminController {
     private AdminService adminService;
 
     @GetMapping
-    public List<Admin> getAllAdmins() {
-        return adminService.getAllAdmins();
+    public List<Admin> getAllAdmins(@RequestParam Long gymId) {
+        return adminService.getAllAdminsByGymId(gymId);
     }
 
     @PostMapping
@@ -30,21 +30,21 @@ public class AdminController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
-        adminService.deleteAdmin(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deleteAdmin(@PathVariable Long id, @RequestParam Long gymId) {
+        if (adminService.getAdminByIdAndGymId(id, gymId).isPresent()) {
+            adminService.deleteAdmin(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateAdmine (@PathVariable Long id, @RequestBody Admin adminData) {
-        boolean updated = adminService.updateAdminById(id, adminData);
-
+    public ResponseEntity<String> updateAdmin(@PathVariable Long id, @RequestParam Long gymId, @RequestBody Admin adminData) {
+        boolean updated = adminService.updateAdminById(id, gymId, adminData);
         if (updated) {
             return ResponseEntity.ok("Admin updated successfully");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Admin not found.");
         }
-
-
     }
 
 }

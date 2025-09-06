@@ -16,12 +16,13 @@ public class PaymentService {
     @Autowired
     private PaymentRepo paymentRepo;
 
-    public List<Payment> getAllPayments() {
-        return paymentRepo.findAll();
+    public List<Payment> getAllPaymentsByGymId(Long gymId) {
+        return paymentRepo.findByGym_Id(gymId);
     }
 
-    public Optional<Payment> getPaymentById(Long id) {
-        return paymentRepo.findById(id); // ✅ retourne Optional<Member>
+    public Optional<Payment> getPaymentByIdAndGymId(Long id, Long gymId) {
+        return paymentRepo.findById(id)
+                .filter(payment -> payment.getGym() != null && payment.getGym().getId().equals(gymId));
     }
 
     public Payment savePayment(Payment payment) {

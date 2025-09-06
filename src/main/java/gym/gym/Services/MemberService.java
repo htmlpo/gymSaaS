@@ -19,12 +19,13 @@ public class MemberService {
     private GymRepo gymRepo;
 
 
-    public List<Member> getAllMembers() {
-        return memberRepo.findAll();
+    public List<Member> getAllMembersByGymId(Long gymId) {
+        return memberRepo.findByGym_Id(gymId);
     }
 
-    public Optional <Member> getMemberById(Long id) {
-        return memberRepo.findById(id); // ✅ retourne Optional<Member>
+    public Optional<Member> getMemberByIdAndGymId(Long id, Long gymId) {
+        return memberRepo.findById(id)
+            .filter(member -> member.getGym() != null && member.getGym().getId().equals(gymId));
     }
 
     public Member saveMember(Member memberDto) {

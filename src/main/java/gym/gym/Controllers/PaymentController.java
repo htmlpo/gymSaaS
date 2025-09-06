@@ -18,8 +18,8 @@ public class PaymentController {
     private PaymentService paymentService;
 
     @GetMapping
-    public List<Payment> getAllPayments() {
-        return paymentService.getAllPayments();
+    public List<Payment> getAllPayments(@RequestParam Long gymId) {
+        return paymentService.getAllPaymentsByGymId(gymId);
     }
 
     @PostMapping
@@ -28,15 +28,15 @@ public class PaymentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
-        Optional<Payment> payment = paymentService.getPaymentById(id);
+    public ResponseEntity<Payment> getPaymentById(@PathVariable Long id, @RequestParam Long gymId) {
+        Optional<Payment> payment = paymentService.getPaymentByIdAndGymId(id, gymId);
         return payment.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
-        if (paymentService.getPaymentById(id).isPresent()) {
+    public ResponseEntity<Void> deletePayment(@PathVariable Long id, @RequestParam Long gymId) {
+        if (paymentService.getPaymentByIdAndGymId(id, gymId).isPresent()) {
             paymentService.deletePayment(id);
             return ResponseEntity.noContent().build();
         }

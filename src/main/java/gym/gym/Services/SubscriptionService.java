@@ -20,12 +20,13 @@ public class SubscriptionService {
     @Autowired
     private PaymentRepo paymentRepo;
 
-    public List<Subscription> getAllSubscriptions() {
-        return subscriptionRepository.findAll();
+    public List<Subscription> getAllSubscriptionsByGymId(Long gymId) {
+        return subscriptionRepository.findByGym_Id(gymId);
     }
 
-    public Optional<Subscription> getSubscriptionById(Long id) {
-        return subscriptionRepository.findById(id);
+    public Optional<Subscription> getSubscriptionByIdAndGymId(Long id, Long gymId) {
+        return subscriptionRepository.findById(id)
+            .filter(subscription -> subscription.getGym() != null && subscription.getGym().getId().equals(gymId));
     }
 
     public Subscription saveSubscription(Subscription subscription) {

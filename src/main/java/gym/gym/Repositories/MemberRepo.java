@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface MemberRepo extends JpaRepository<Member, Long> {
     Optional<Member> findByEmail(String email);
+    java.util.List<Member> findByGym_Id(Long gymId);
 }

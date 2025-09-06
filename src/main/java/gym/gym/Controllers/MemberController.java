@@ -18,13 +18,13 @@ public class MemberController {
     private MemberService memberService;
 
     @GetMapping
-    public List<Member> getAllMembers() {
-        return memberService.getAllMembers();
+    public List<Member> getAllMembers(@RequestParam Long gymId) {
+        return memberService.getAllMembersByGymId(gymId);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Member> getMemberById(@PathVariable Long id) {
-        Optional<Member> member = memberService.getMemberById(id);
+    public ResponseEntity<Member> getMemberById(@PathVariable Long id, @RequestParam Long gymId) {
+        Optional<Member> member = memberService.getMemberByIdAndGymId(id, gymId);
         return member.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -35,8 +35,8 @@ public class MemberController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Member> updateMember(@PathVariable Long id, @RequestBody Member updatedMember) {
-        return memberService.getMemberById(id)
+    public ResponseEntity<Member> updateMember(@PathVariable Long id, @RequestParam Long gymId, @RequestBody Member updatedMember) {
+        return memberService.getMemberByIdAndGymId(id, gymId)
                 .map(member -> {
                     member.setFirstName(updatedMember.getFirstName());
                     member.setLastName(updatedMember.getLastName());
@@ -49,8 +49,8 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMember(@PathVariable Long id) {
-        if (memberService.getMemberById(id).isPresent()) {
+    public ResponseEntity<Void> deleteMember(@PathVariable Long id, @RequestParam Long gymId) {
+        if (memberService.getMemberByIdAndGymId(id, gymId).isPresent()) {
             memberService.deleteMember(id);
             return ResponseEntity.noContent().build();
         }

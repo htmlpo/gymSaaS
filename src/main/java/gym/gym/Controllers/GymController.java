@@ -31,15 +31,15 @@ public class GymController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Gym> getGymsById(@PathVariable Long id) {
-        Optional<Gym> payment = gymService.getGymById(id);
-        return payment.map(ResponseEntity::ok)
+    public ResponseEntity<Gym> getGymsById(@PathVariable Long id, @RequestParam Long gymId) {
+        Optional<Gym> gym = gymService.getGymByIdAndGymId(id, gymId);
+        return gym.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
-        if (gymService.getGymById(id).isPresent()) {
+    public ResponseEntity<Void> deleteGym(@PathVariable Long id, @RequestParam Long gymId) {
+        if (gymService.getGymByIdAndGymId(id, gymId).isPresent()) {
             gymService.deleteGym(id);
             return ResponseEntity.noContent().build();
         }
