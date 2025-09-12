@@ -24,9 +24,9 @@ public class MemberService {
     @Autowired
     private GymRepo gymRepo;
 
-    // Authentification d'un membre par email, password et gymId (hash)
-    public Optional<Member> authenticateMember(String email, String password, Long gymId) {
-        Optional<Member> memberOpt = memberRepo.findByEmailAndGym_Id(email, gymId);
+    // Authentification d'un membre par email et password (hash)
+    public Optional<Member> authenticateMember(String email, String password) {
+        Optional<Member> memberOpt = memberRepo.findByEmail(email);
         if (memberOpt.isPresent() && passwordEncoder.matches(password, memberOpt.get().getPassword())) {
             return memberOpt;
         }

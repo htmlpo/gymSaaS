@@ -22,11 +22,10 @@ public class AuthController {
     private MemberService memberService;
     @PostMapping("/member/login")
     public ResponseEntity<?> memberLogin(@RequestBody Map<String, Object> loginRequest) {
-        String email = (String) loginRequest.get("email");
-        String password = (String) loginRequest.get("password");
-        Long gymId = Long.valueOf(loginRequest.get("gymId").toString());
+    String email = (String) loginRequest.get("email");
+    String password = (String) loginRequest.get("password");
 
-        return memberService.authenticateMember(email, password, gymId)
+    return memberService.authenticateMember(email, password)
                 .map(member -> {
                     Map<String, Object> response = new HashMap<>();
                     response.put("memberId", member.getId());
@@ -42,17 +41,15 @@ public class AuthController {
 
     @PostMapping("/admin/login")
     public ResponseEntity<?> Adminlogin(@RequestBody Map<String, Object> loginRequest) {
-        String username = (String) loginRequest.get("username");
-        String password = (String) loginRequest.get("password");
-        Long gymId = Long.valueOf(loginRequest.get("gymId").toString());
+    String username = (String) loginRequest.get("username");
+    String password = (String) loginRequest.get("password");
 
-        return adminService.authenticateAdmin(username, password, gymId)
+    return adminService.authenticateAdmin(username, password)
                 .map(admin -> {
                     Map<String, Object> response = new HashMap<>();
                     response.put("adminId", admin.getId());
                     response.put("gymId", admin.getGym().getId());
                     response.put("username", admin.getUsername());
-
                     return ResponseEntity.ok(response);
                 })
                 .orElseGet(() -> ResponseEntity.status(401).body(Map.of("error", "Identifiants invalides")));

@@ -24,9 +24,9 @@ private GymRepo gymRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Authentification d'un admin par username, password et gymId (hash)
-    public Optional<Admin> authenticateAdmin(String username, String password, Long gymId) {
-        Optional<Admin> adminOpt = adminRepo.findByUsernameAndGym_Id(username, gymId);
+    // Authentification d'un admin par username et password (hash)
+    public Optional<Admin> authenticateAdmin(String username, String password) {
+        Optional<Admin> adminOpt = adminRepo.findByUsername(username);
         if (adminOpt.isPresent() && passwordEncoder.matches(password, adminOpt.get().getPassword())) {
             return adminOpt;
         }
