@@ -21,9 +21,9 @@ public class GymService {
         return gymRepo.findAll();
     }
 
-    public Optional<Gym> getGymByIdAndGymId(Long id, Long gymId) {
-        return gymRepo.findById(id)
-            .filter(gym -> gym.getId().equals(gymId));
+
+    public Optional<Gym> getGymById(Long id) {
+        return gymRepo.findById(id);
     }
 
     public Gym saveGym(Gym gym) {

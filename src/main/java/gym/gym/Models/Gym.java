@@ -7,6 +7,7 @@ import java.security.SecureRandom;
 import java.util.Date;
 
 @Entity
+
 public class Gym {
 
     @Id
@@ -15,10 +16,20 @@ public class Gym {
 
     private String name;
 
+
     private String phone;
     private String address;
     private String city;
     private Date creation_date;
+
+    private boolean isPaid = false;
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(boolean paid) {
+        isPaid = paid;
+    }
 
 
     public String getAddress() {
